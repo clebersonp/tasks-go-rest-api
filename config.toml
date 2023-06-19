@@ -1,0 +1,13 @@
+# Ref: https://pkg.go.dev/github.com/spf13/viper
+
+# API config
+[api]
+port = "8080"
+
+# Database config
+[database]
+host = "localhost"
+port = "5432"
+user = "user"
+password = "password"
+name = "tasks-api-db"
