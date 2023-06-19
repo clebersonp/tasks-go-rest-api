@@ -1,12 +1,10 @@
 package models
 
 import (
-	"fmt"
-	"log"
-
 	"github.com/clebersonp/tasks-go-rest-api/db"
 )
 
+// Insert inserts into tasks table the task
 func Insert(task Task) (id int64, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
