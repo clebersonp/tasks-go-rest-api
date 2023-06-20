@@ -2,9 +2,15 @@ package handlers
 
 import "fmt"
 
+// rest api constants
 const (
 	contentType     string = "Content-Type"
 	applicationJson string = "application/json"
+)
+
+// messages constants
+const (
+	tryAgainLaterMsg string = "Something went wrong. Please try again later"
 )
 
 // createPayloadError creates the payload error with given message
