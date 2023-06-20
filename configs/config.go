@@ -2,7 +2,11 @@
 // Everything will be loaded from file using viper third-party package. https://pkg.go.dev/github.com/spf13/viper
 package configs
 
-import "github.com/spf13/viper"
+import (
+	"log"
+
+	"github.com/spf13/viper"
+)
 
 var cfg *config
 
@@ -30,10 +34,13 @@ func init() {
 	viper.SetDefault("api.port", "9000")
 	viper.SetDefault("database.host", "localhost")
 	viper.SetDefault("database.port", "5432")
+	if err := load(); err != nil {
+		log.Fatalf("Failed to load server configuration: %v\n", err)
+	}
 }
 
 // Defines the viper configuration and loads all values ​​from the provided configuration file
-func Load() error {
+func load() error {
 	viper.SetConfigName("config")
 	viper.SetConfigType("toml")
 	viper.AddConfigPath(".")
@@ -54,11 +61,11 @@ func Load() error {
 
 	// Load db-config values
 	cfg.DB = dbConfig{
-		Host: viper.GetString("database.host"),
-		Port: viper.GetString("database.port"),
-		User: viper.GetString("database.user"),
+		Host:     viper.GetString("database.host"),
+		Port:     viper.GetString("database.port"),
+		User:     viper.GetString("database.user"),
 		Password: viper.GetString("database.password"),
-		Database: viper.GetString("database.name"),	
+		Database: viper.GetString("database.name"),
 	}
 
 	return nil
