@@ -14,7 +14,9 @@ import (
 
 // Get gets a task by id
 func Get(w http.ResponseWriter, r *http.Request) {
+
 	w.Header().Add(contentType, applicationJson)
+
 	idstr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idstr)
 	if err != nil {
@@ -30,13 +32,11 @@ func Get(w http.ResponseWriter, r *http.Request) {
 	task, err := models.Get(int64(id))
 	if err != nil {
 		log.Printf("Error trying to get task by id from database: %v\n", err)
-
 		if sql.ErrNoRows.Error() == err.Error() {
 			w.WriteHeader(http.StatusNoContent)
 			return
 		}
-
-		payload := createPayloadError(fmt.Sprintf("Something went wrong: %v", err))
+		payload := createPayloadError(tryAgainLaterMsg)
 		w.WriteHeader(http.StatusInternalServerError)
 		if err := json.NewEncoder(w).Encode(payload); err != nil {
 			log.Printf("Error trying to encode payload error: %v\n", err)

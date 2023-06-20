@@ -22,17 +22,11 @@ func Create(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Add(contentType, applicationJson)
 	var task models.Task
-	err := json.NewDecoder(r.Body).Decode(&task);
+	err := json.NewDecoder(r.Body).Decode(&task)
 	defer r.Body.Close()
 	if err != nil {
 		log.Printf("Error trying to decode body payload: %v\n", err)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return
-	}
-
-	newTask, err := models.Insert(task)
-	if err != nil {
-		payload := createPayloadError(fmt.Sprintf("Something wrong happens trying to insert tasks: %v", err))
+		payload := createPayloadError(tryAgainLaterMsg)
 		w.WriteHeader(http.StatusInternalServerError)
 		if err := json.NewEncoder(w).Encode(payload); err != nil {
 			log.Printf("Error trying to encode error payload: %v\n", err)
@@ -40,6 +34,18 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	newTask, err := models.Insert(task)
+	if err != nil {
+		log.Printf("Something wrong happens trying to insert tasks: %v\n", err)
+		payload := createPayloadError(tryAgainLaterMsg)
+		w.WriteHeader(http.StatusInternalServerError)
+		if err := json.NewEncoder(w).Encode(payload); err != nil {
+			log.Printf("Error trying to encode error payload: %v\n", err)
+		}
+		return
+	}
+
+	w.Header().Add("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, newTask.ID))
 	w.WriteHeader(http.StatusCreated)
 	if err := json.NewEncoder(w).Encode(newTask); err != nil {
 		log.Printf("Error trying to encode success payload: %v\n", err)
