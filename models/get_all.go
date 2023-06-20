@@ -8,13 +8,14 @@ import (
 
 // GetAll returns all tasks in database
 func GetAll() (tasks []Task, err error) {
+	tasks = make([]Task, 0)
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
 	}
 	defer conn.Close()
 
-	rows, err := conn.Query(`SELECT * FROM tasks`)
+	rows, err := conn.Query(`SELECT * FROM tasks ORDER BY id DESC`)
 	if err != nil {
 		return
 	}
