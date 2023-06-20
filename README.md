@@ -8,6 +8,8 @@ Simple rest api on `golang` to manager tasks in `postgresql` database.
 - [Postman](https://www.postman.com/) or `curl` to test the Rest API
 - [Docker](https://www.docker.com/) to run [postgresql](https://hub.docker.com/_/postgres) container for persisting data
 
+`NOTE`: Database name, table name, username, password, database host, database port and application port used in the following configuration need to match the [config.toml](config.toml) configuration file.
+
 ## Baby step setup:
 `NOTE`: Run the following commands in terminal to run `postgresql` as a `docker container`, create database and table for the application:
 - Build the `docker` image and run `postgresql`:
@@ -86,7 +88,7 @@ $ go run main.go
 ```
 
 ## Testing the Rest API with `Postman` or `curl`:
-- `POST` Create a new task:
+- `POST`: Create a new task:
 ```bash
 $ curl --location --request POST 'localhost:8080/tasks' \
 --header 'Content-Type: application/json' \
@@ -97,17 +99,17 @@ $ curl --location --request POST 'localhost:8080/tasks' \
 }'
 ```
 
-- Method `GET`: List all tasks:
+- `GET`: List all tasks:
 ```bash
 $ curl --location --request GET 'localhost:8080/tasks'
 ```
 
-- Method `GET`: Retrieve a task by `id`:
+- `GET`: Retrieve a task by `id`:
 ```bash
 $ curl --location --request GET 'localhost:8080/tasks/1'
 ```
 
-- Method `PUT`: Update a task:
+- `PUT`: Update a task:
 ```bash
 $ curl --location --request PUT 'localhost:8080/tasks/1' \
 --header 'Content-Type: application/json' \
@@ -118,7 +120,7 @@ $ curl --location --request PUT 'localhost:8080/tasks/1' \
 }'
 ```
 
-- Method `DELETE`: Delete a task by `id`:
+- `DELETE`: Delete a task by `id`:
 ```bash
 $ curl --location --request DELETE 'localhost:8080/tasks/1'
 ```
